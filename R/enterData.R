@@ -13,15 +13,17 @@ enterData <- function(filename="quest.csv", path="data/") {
      # Check if variable database exists otherwise creates one
      if (!exists("database")) database <- data.frame()
 
-    for(i in 1:5) {
+    for(i in 1:500) {
     #---------------------- Start the questionnaire ----------------------------
     id <- as.character(readline("id: "))
     pseudonym <- as.character(readline("pseudonym: "))
     age <- as.numeric(readline("age: "))
+    sex <- readline("sex: ")
 
     #-------------- Appends database from one questionnaire -------------------
-    database <- rbind(database,data.frame(id, pseudonym, age))
-    rm(id, pseudonym, age)
+    database$sex <- NULL
+    database <- rbind(database,data.frame(id, pseudonym, age, sex))
+    rm(id, pseudonym, age, sex)
     #-------------- Next questionnaire -------------------
     if(readline("Do you want to go on? (leave empty to proceed):")!="") break
     }
