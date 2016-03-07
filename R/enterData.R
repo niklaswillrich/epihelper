@@ -1,5 +1,4 @@
 
-
 enterData <- function(filename="quest.csv", path="data/") {
 
     file <- paste0(path, filename)

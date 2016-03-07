@@ -1,11 +1,11 @@
-Package: epietr
+Package: epiet
 Title: This package computes infectious disease data
 Version: 0.0.0.9000
 Authors@R: person("Jakob", "Schumacher", email = "jakob.schumacher@web.de", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: This package is for EPIET/EUPHEM/FETP supported by ECDC
 Depends:
     R (>= 3.2.2)
-License: What license is it under?
+License: GPL-2
 LazyData: true
 RoxygenNote: 5.0.1
 Suggests: knitr,

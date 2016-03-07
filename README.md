@@ -2,7 +2,7 @@
 # In development 
 This package is under development.
 
-# Aim of the package epietr
+# Aim of the package epiet
 This package supports the European programme for intervention epidemiology training (EPIET) of the European Centre for Disease Prevention and Control (ECDC). 
 
 Functions help to identify the source of outbreaks and communicate results as well as enter data of questionnaires. 
@@ -21,5 +21,5 @@ This package wants to be improved by all persons affiliated with the programm in
 # Installation
 After installing R and R-Studio type into the R prompt the following two lines:
 install.packages("devtools")
-devtools::install_github("jakobschumacher/epietr")
-require("epietr")
+devtools::install_github("jakobschumacher/epiet")
+require("epiet")

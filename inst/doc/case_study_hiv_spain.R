@@ -1,0 +1,103 @@
+## ---- warning=FALSE, message=FALSE, error=FALSE, comment=FALSE-----------
+# Load packages
+# require(foreign) # Read dta files version 12 and below
+# require(readstata13) # Read dta files version 13 and higher
+# require(dplyr) # Data manipulation
+# require(survival) # Advanced regression analysis for survival analysis
+# require(ggplot2) # Plotting
+
+# Set the correct directory
+# setwd("~/Documents/Projekte/epiet")
+
+# Set knitr options to not evaluate anything
+knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, comment=FALSE)
+
+## ------------------------------------------------------------------------
+#  hiv.data <- read.dta("HIVexample2015.dta", convert.factors = FALSE)
+
+## ------------------------------------------------------------------------
+#  hiv.data$denom <- NA
+#  hiv.data$denom[hiv.data$seroco == 0] <-
+#    (hiv.data$last_neg[hiv.data$seroco == 0]-
+#       hiv.data$first_test[hiv.data$seroco == 0])/365.25
+#  hiv.data$denom[hiv.data$seroco == 1] <-
+#    (hiv.data$first_pos[hiv.data$seroco == 1]-
+#       hiv.data$first_test[hiv.data$seroco == 1])/365.25
+#  
+#  
+#  
+#  # What about this way? I dont have the dataset, but I think it should work (Jakob)
+#  hiv.data %>%
+#      mutate(denom = ifelse(seroco==0, (last_neg - first_test)/365.25, (first_pos - first_test)/365.25 ))
+#  
+
+## ------------------------------------------------------------------------
+#  hiv.data.sum <- hiv.data %>%
+#    group_by(sex, idu, msm, sexwork, age2) %>%
+#    summarize(seroco.sum = sum(seroco), denom.sum = sum(denom))
+
+## ------------------------------------------------------------------------
+#  save.image("HIVexample2015poisson.Rsv")
+#  
+#  # Why do you save it in a Rsv file and not a Rdata file (Jakob)
+
+## ------------------------------------------------------------------------
+#  poisson.reg <-
+#    glm(seroco.sum ~ idu , family = poisson(link = "log"),
+#        data = hiv.data.sum, offset = log(denom.sum))
+#  exp(poisson.reg$coefficients[[2]]) # same result as for Stata case
+#  poisson.reg
+#  confint(poisson.reg)
+#  
+#  ggplot(hiv.data.sum, aes(seroco.sum)) +
+#    geom_histogram(binwidth = 5, origin = 0,
+#                   right = FALSE, fill = "red")
+#  # slightly different from the stata-version, because we cannot specify
+#  # the values to be discrete.
+#  
+#  poisson.reg.2 <- update(poisson.reg,
+#                          formula = seroco.sum ~ sex + age2 +sexwork)
+#  
+#  poisson.reg.3 <-
+#    glm(seroco.sum ~ sex + age2 + idu , family = poisson(link = "log"),
+#        data = hiv.data.sum, offset = log(denom.sum))
+#  
+#  poisson.reg.4 <- update(poisson.reg,
+#                          formula = seroco.sum ~ sex + age2 + sexwork + idu + msm )
+#  
+#  poisson.reg.5 <- update(poisson.reg,
+#                          formula = seroco.sum ~ sex + age2 + sexwork + idu )
+#  
+#  poisson.reg.6 <- update(poisson.reg,
+#                         formula = seroco.sum ~ sex + age2 + sexwork + msm  )
+#  
+#  poisson.reg.7 <- update(poisson.reg,
+#                          formula = seroco.sum ~ sex + age2 + idu + msm )
+#  
+#  poisson.reg.7 <-
+#    glm(seroco.sum ~ sex + age2 + idu*sex + msm , family = poisson(link = "log"),
+#        data = hiv.data.sum, offset = log(denom.sum))
+#  
+
+## ------------------------------------------------------------------------
+#  cols <- c("Observed values"="#f04546","Predicted values"="#3591d1")
+#  ggplot(hiv.data.sum) +
+#    geom_histogram(aes(seroco.sum, fill = "Observed values"),
+#                   binwidth = 5, origin = 0,
+#                   alpha = 0.5) +
+#    geom_histogram(aes(poisson.reg.7$fitted.values, fill = "Predicted values"),
+#                   binwidth = 5, origin = 0,
+#                   alpha = 0.5)
+
+## ------------------------------------------------------------------------
+#  cox.reg <- coxph(Surv(denom, seroco) ~ idu+sex, data = hiv.data)
+#  cox.reg.2 <- coxph(Surv(denom, seroco) ~ idu*msm + age + factor(centrocod),
+#                   data = hiv.data)
+#  
+#  cox.reg.strata <- coxph(Surv(denom, seroco) ~ idu*msm + age + strata(centrocod),
+#                          data = hiv.data)
+#  
+
+## ------------------------------------------------------------------------
+#  cox.zph(cox.reg.2)
+
