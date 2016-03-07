@@ -21,7 +21,6 @@ enterData <- function(filename="quest.csv", path="data/") {
     sex <- readline("sex: ")
 
     #-------------- Appends database from one questionnaire -------------------
-    database$sex <- NULL
     database <- rbind(database,data.frame(id, pseudonym, age, sex))
     rm(id, pseudonym, age, sex)
     #-------------- Next questionnaire -------------------
@@ -31,4 +30,3 @@ enterData <- function(filename="quest.csv", path="data/") {
     write.csv(database, file=file, row.names = FALSE)
 
 }
-enterData()
