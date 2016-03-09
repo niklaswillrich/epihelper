@@ -2,4 +2,5 @@
 
 export(calcRelativeRisk)
 export(generateOutbreak)
+export(ir)
 export(plotEpicurve)
