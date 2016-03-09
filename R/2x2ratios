@@ -1,33 +1,35 @@
-####################################
-# Function to produce risk ratio or odds ratio results from
-# from a 2x2 contingency table for multiple exposures
-#
-# Note: this function gives the equivalent of the cs command in STATA
-#
-# Author: Daniel Gardiner
-# Contact: daniel.gardiner@phe.gov.uk
-# date: 08.12.2014
-
+#' calculate risk ratio or odds ratio
+#' 
+#' Function to create a data.frame of risk ratio or odds ratio results from a 2x2 contingency table for 
+#' multiple exposures. Note: this function gives the equivalent of the cs command in STATA. Date: 08.12.2014
+#' @param data data.frame containing outcome and exposure data
+#' @param outcome  a character vector containing the name of the outcome column of (1s and 0s) in data
+#' @param exposure  a character vector containing the names of exposure columns  of (1s and 0s) in data or vectors of exposures (1s and 0s)
+#' @param measure a character vector indicating either rr (risk ratio) or 'or' (odds ratio)
+#' @param verbose a logical vector, if TRUE gives full results if FALSE gives restricted results
+#' @param output a data.frame containing results for each exposure
+#' @return A list of results 
+#' @author Daniel Gardiner, \email{daniel.gardiner@phe.gov.uk}
+#' @keywords epidemiology
+#' @export
+#' @examples
+#' # define dummy data
+#' set.seed(5)
+#' 
+#' df = data.frame(outcome = sample(c(0,1), 100, replace = T), 
+#'                 exposure1 = sample(c(0,1), 100, replace = T),
+#'                 exposure2 = sample(c(0,1), 100, replace = T))
+#' # function examples
+#' ratios(df, outcome = "outcome", exposures = c("exposure1", "exposure2"))
+#' 
+#' ratios(df, outcome = "outcome", exposures = c("exposure1", "exposure2"),
+#'        measure = "or")
+#' # using verbose = TRUE gives same output as you get in stata
+#' ratios(df, outcome = "outcome", exposures = "exposure1", verbose = TRUE)
 ratios = function(data, outcome = "outcome", 
                   exposures = c("exposure1", "exposure2"), 
                   measure = "rr", verbose = F){
-  # Description:
-  # function to create a data.frame of risk ratio or odds ratio results from 
-  # a 2x2 contingency table for multiple exposures
-  #
-  # Args:   data: data.frame containing outcome and exposure data
-  #      outcome: a character vector containing the name of the outcome column of 
-  #               (1s and 0s) in data 
-  #    exposures:  a character vector containing the names of exposure columns 
-  #                of (1s and 0s) in data 
-  #                   vectors of exposures (1s and 0s)
-  #      measure:  a character vector indicating either rr (risk ratio)
-  #                or 'or' (odds ratio)
-  #
-  #     verbose:   a logical vector, if TRUE gives full results
-  #                                  if FALSE gives restricted results
-  #
-  # output: a data.frame containing results for each exposure
+
   require(epitools)
   
   out = as.numeric(data[, which(colnames(data) == outcome)])
@@ -93,25 +95,4 @@ ratios = function(data, outcome = "outcome",
   
   results
 }  
-
-####################################
-# examples
-
-# define dummy data
-
-set.seed(5)
-
-df = data.frame(outcome = sample(c(0,1), 100, replace = T), 
-                exposure1 = sample(c(0,1), 100, replace = T),
-                exposure2 = sample(c(0,1), 100, replace = T))
-
-# function examples
-
-ratios(df, outcome = "outcome", exposures = c("exposure1", "exposure2"))
-
-ratios(df, outcome = "outcome", exposures = c("exposure1", "exposure2"),
-       measure = "or")
-
-# using verbose = TRUE gives same output as you get in stata
-ratios(df, outcome = "outcome", exposures = "exposure1", verbose = TRUE)
 
