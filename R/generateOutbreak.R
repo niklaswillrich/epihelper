@@ -13,14 +13,15 @@
 #' @export
 
 
-# Generate example data
 generateOutbreak <- function(n=100,
                              percentageCases=0.5,
                              pathogen="Salmonella",
                              type="pointsource", # other are "propageted", "continuing"
                              startdate="2013-09-23",
                              enddate="2013-10-04",
-                             dataquality="messy"){
+                             dataquality="standard",
+                             probabilityOfTrueExposue=0.2,
+                             numberExposures=5){
   
   # Initialize data.frame
   df <- data.frame(number=1:n)
@@ -65,7 +66,7 @@ generateOutbreak <- function(n=100,
   if(pathogen=="Measles") {incubationtime=12}
   if(pathogen=="Influenza") {incubationtime=2}
   if(pathogen=="Ebola") {incubationtime=9}
- 
+  
   if(type=="pointsource") {
     dates <- as.numeric(startdate)+rpois(n=n, lambda=incubationtime)
     dates <- dates[dates<as.numeric(enddate)]
@@ -107,7 +108,7 @@ generateOutbreak <- function(n=100,
     df$stomachpain <- ifelse(df$ill, sample(c(TRUE, FALSE), prob=c(0.9, 0.1), replace=T), FALSE)
     df$diarrhea <- ifelse(df$ill, sample(c(TRUE, FALSE), prob=c(0.8, 0.2), replace=T), FALSE)
     df$vomiting <- ifelse(df$ill, sample(c(TRUE, FALSE), prob=c(0.5, 0.5), replace=T), FALSE)
-    df$fever <- ifelse(df$ill, sample(c(TRUE, FALSE), prob=c(0.2, 0.8), replace=T), FALSE)
+    df$fever <- ifelse(df$ill, sample(c(TRUE, FALSE), prob=c(0.3, 0.7), replace=T), FALSE)
     df$gastrointestinalbleeding <- ifelse(df$ill, sample(c(TRUE, FALSE), prob=c(0.1, 0.9), replace=T), FALSE)
   }
   
@@ -142,18 +143,18 @@ generateOutbreak <- function(n=100,
     df$hemorrhage  <- ifelse(df$ill, sample(c(TRUE, FALSE), prob=c(0.5, 0.5), replace=T), FALSE)
     df$death  <- ifelse(df$ill, sample(c(TRUE, FALSE), prob=c(0.4, 0.6), replace=T), FALSE)
   }
- 
+  
   #-------------------------------------- Exposures --------------------------------------------------
   if(pathogen=="Salmonella"|pathogen=="Norovirus") {
-    probabilityOfTrueExposue=0.2
     
-    for(i in 1:10) {
+    for(i in 1:numberExposures) {
       l <- length(names(df))
-      randomProbability <- sample(c(0.8, 0.5), size=1, prob=c(probabilityOfTrueExposue, 1-probabilityOfTrueExposue))
+      causativeExposure <- sample(c(TRUE, FALSE), size=1, prob=c(probabilityOfTrueExposue, 1-probabilityOfTrueExposue))
       
-      df$exposure <- ifelse(df$ill, 
-                            sample(c(TRUE, FALSE), size=1, prob=c(randomProbability, 1-randomProbability), replace=T), 
-                            sample(c(FALSE, TRUE), size=1, prob=c(randomProbability, 1-randomProbability), replace=T))
+      if(causativeExposure) {df$exposure <- ifelse(df$ill, 
+                                                   sample(c(TRUE, FALSE), size=nrow(df), prob=c(0.8, 0.2), replace=T),
+                                                   sample(c(TRUE, FALSE), size=nrow(df), prob=c(0.2, 0.8), replace=T))}
+      if(!causativeExposure) {df$exposure <- sample(c(TRUE, FALSE), size=nrow(df), prob=c(0.5, 0.5), replace=T)}
       
       names(df)[l+1] <- sample(food, size=length(names(df)[grepl("exposure", names(df))]), replace=T)
     }
@@ -172,20 +173,20 @@ generateOutbreak <- function(n=100,
                              sample(c(TRUE, FALSE), size=1, prob=c(0.2, 0.8), replace=T))
   }
   
- 
+  
   #-------------------------------------- Risk factors --------------------------------------------------
   if(pathogen=="Ebola") {
     df$unsafeburial <- ifelse(df$ill, 
-                             sample(c(TRUE, FALSE), size=1, prob=c(0.3, 0.7), replace=T), 
-                             sample(c(TRUE, FALSE), size=1, prob=c(0.1, 0.9), replace=T))
-    
-    df$healthcareworker <- ifelse(df$ill, 
                               sample(c(TRUE, FALSE), size=1, prob=c(0.3, 0.7), replace=T), 
                               sample(c(TRUE, FALSE), size=1, prob=c(0.1, 0.9), replace=T))
     
+    df$healthcareworker <- ifelse(df$ill, 
+                                  sample(c(TRUE, FALSE), size=1, prob=c(0.3, 0.7), replace=T), 
+                                  sample(c(TRUE, FALSE), size=1, prob=c(0.1, 0.9), replace=T))
+    
     df$contactperson <- ifelse(df$ill, 
-                              sample(c(TRUE, FALSE), size=1, prob=c(0.6, 0.4), replace=T), 
-                              sample(c(TRUE, FALSE), size=1, prob=c(0.1, 0.9), replace=T))
+                               sample(c(TRUE, FALSE), size=1, prob=c(0.6, 0.4), replace=T), 
+                               sample(c(TRUE, FALSE), size=1, prob=c(0.1, 0.9), replace=T))
   }
   
   
@@ -212,5 +213,3 @@ generateOutbreak <- function(n=100,
   df
   
 }
-
-
