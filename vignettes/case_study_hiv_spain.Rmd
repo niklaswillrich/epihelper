@@ -1,6 +1,6 @@
 ---
 title: "Multivariate analysis module case study: HIV spain"
-author: "Niklas Willrich"
+author: "Various"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -37,19 +37,9 @@ knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, com
 hiv.data <- read.dta("HIVexample2015.dta", convert.factors = FALSE)
 ```
 
-## Generate the time variable ( NW: Simpler way to fill the variable conditionally ?)
+## Generate the time variable
 ```{r}
-hiv.data$denom <- NA
-hiv.data$denom[hiv.data$seroco == 0] <-
-  (hiv.data$last_neg[hiv.data$seroco == 0]-
-     hiv.data$first_test[hiv.data$seroco == 0])/365.25
-hiv.data$denom[hiv.data$seroco == 1] <-
-  (hiv.data$first_pos[hiv.data$seroco == 1]-
-     hiv.data$first_test[hiv.data$seroco == 1])/365.25
-
-
-
-# What about this way? I dont have the dataset, but I think it should work (Jakob)
+# seems the cleaner solution (NW)
 hiv.data %>% 
     mutate(denom = ifelse(seroco==0, (last_neg - first_test)/365.25, (first_pos - first_test)/365.25 ))
 
@@ -66,9 +56,10 @@ hiv.data.sum <- hiv.data %>%
 
 ## Save the data in a file
 ```{r}
-save.image("HIVexample2015poisson.Rsv")
+save.image("HIVexample2015poisson.Rdata")
 
-# Why do you save it in a Rsv file and not a Rdata file (Jakob)
+# .Rsv was just my invention. If .Rdata is the standard
+# we can use this.
 ```
 
 
