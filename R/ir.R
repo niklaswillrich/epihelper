@@ -1,11 +1,12 @@
 #' Calculate table for incidence data
 #'
-#' This function gives a table of results for incidence data
+#' This function gives a table of results for incidence data.
+#' The results are comparable to the ir function in Stata.
 #'
 #' @param data data frame we are working on
 #' @param cases string of case variable
 #' @param exposure string of exposure variable
-#' @param time time of exposure for subjects
+#' @param time time at risk for subjects
 #' @param output type of table output ( e.g. "plain", "rmarkdown")
 #' @return tables of results and statistics
 #'    table contains table of cases, time at risk and incidence rate
