@@ -1,4 +1,24 @@
-
+#' calculate risk ratio or odds ratio
+#' 
+#' Function to create a data.frame of risk ratio or odds ratio results from a 2x2 contingency table for 
+#' multiple exposures. Note: this function gives the equivalent of the cs command in STATA. Date: 08.12.2014
+#' @param data data.frame containing outcome and exposure data
+#' @param outcome  a character vector containing the name of the outcome column of (1s and 0s) in data
+#' @param exposure  a character vector containing the names of exposure columns  of (1s and 0s) in data or vectors of exposures (1s and 0s)
+#' @param measure a character vector indicating either rr (risk ratio) or 'or' (odds ratio)
+#' @param verbose a logical vector, if TRUE gives full results if FALSE gives restricted results
+#' @param output a data.frame containing results for each exposure
+#' @return A list of results 
+#' @author Daniel Gardiner, \email{daniel.gardiner@phe.gov.uk}
+#' @keywords epidemiology
+#' @export
+#' @examples
+#' # define dummy data
+#' 
+#' df = generateOutbreak(dataquality="good", numberExposures = 10, probabilityOfTrueExposue = 0.9)
+#' # function examples
+#' # function examples
+#' ratios(df, outcome = "ill", exposures = c(names(df)[13:dim(df)[2]]))
 
 ratios_adapted = function(data, outcome = "outcome", 
                   exposures = c("exposure1", "exposure2"), 
@@ -88,24 +108,4 @@ ratios_adapted = function(data, outcome = "outcome",
 }  
 
 
-#' calculate risk ratio or odds ratio
-#' 
-#' Function to create a data.frame of risk ratio or odds ratio results from a 2x2 contingency table for 
-#' multiple exposures. Note: this function gives the equivalent of the cs command in STATA. Date: 08.12.2014
-#' @param data data.frame containing outcome and exposure data
-#' @param outcome  a character vector containing the name of the outcome column of (1s and 0s) in data
-#' @param exposure  a character vector containing the names of exposure columns  of (1s and 0s) in data or vectors of exposures (1s and 0s)
-#' @param measure a character vector indicating either rr (risk ratio) or 'or' (odds ratio)
-#' @param verbose a logical vector, if TRUE gives full results if FALSE gives restricted results
-#' @param output a data.frame containing results for each exposure
-#' @return A list of results 
-#' @author Daniel Gardiner, \email{daniel.gardiner@phe.gov.uk}
-#' @keywords epidemiology
-#' @export
-#' @examples
-#' # define dummy data
-#' 
-#' df = generateOutbreak(dataquality="good", numberExposures = 10, probabilityOfTrueExposue = 0.9)
-#' # function examples
-#' # function examples
-#' ratios(df, outcome = "ill", exposures = c(names(df)[13:dim(df)[2]]))
+
