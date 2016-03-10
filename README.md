@@ -4,12 +4,13 @@ Documentation at http://rforepiet.github.io/epiet/. This package is still under 
 
 
 # Functions so far
-* [plotEpicurve](R/plotEpicurve.R): This function generates an epicurve designed according to EPIET standards
+* [plotEpicurve](R/plotEpicurve.R): This function generates an epicurve designed according to EPIET standards (not completely working)
 * [generateOutbreak](R/generateOutbreak.R): This function generates a sample of outbreak data
 * [enterDate](R/enterData.R): enterData: This is an example of how to enter questionnaire data. It can be adapted to different scenarios
-* [calcRelativeRisk](R/calcRelativeRisk.R): This funcion calculates relative risk 
-* [ratios](R/ratios.R): This funcion calculates relative risk 
-* [ratiosAlternative](R/ratiosAlternative.R): This funcion calculates relative risk 
+* [calcRelativeRisk](R/calcRelativeRisk.R): RR function from Jakob (deprecated) 
+* [ratios](R/TwoByTwoRatios.R): RR function from Daniel
+* [ir](R/ir.R): RR function from Niklas
+* [ratios_adapted ](R/ratios_adapted.R): RR my try for combined RR function
 
 # Casestudies so far
 Outbreak module
