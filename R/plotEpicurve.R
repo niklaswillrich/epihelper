@@ -12,8 +12,8 @@
 ################################################################ 
 # The plot function
 ################################################################
-plotEpicurve <- function(dates="Date",
-                         data=Linelist,
+plotEpicurve <- function(data,
+                         dates,
                          unitOfTimeInDays=1, 
                          unitOfLabel="1 week", 
                          xTitle="Date", 
