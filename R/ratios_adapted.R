@@ -1,6 +1,6 @@
 
 
-ratios = function(data, outcome = "outcome", 
+ratios_adapted = function(data, outcome = "outcome", 
                   exposures = c("exposure1", "exposure2"), 
                   measure = "rr", verbose = F){
  
