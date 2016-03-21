@@ -6,7 +6,8 @@
 \usage{
 generateOutbreak(n = 100, percentageCases = 0.5, pathogen = "Salmonella",
   type = "pointsource", startdate = "2013-09-23", enddate = "2013-10-04",
-  dataquality = "messy")
+  dataquality = "standard", probabilityOfTrueExposue = 0.2,
+  numberExposures = 5)
 }
 \arguments{
 \item{n}{Number of persons}

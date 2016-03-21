@@ -8,11 +8,17 @@
 #' @param exposure string of exposure variable
 #' @param time time at risk for subjects
 #' @param output type of table output ( e.g. "plain", "rmarkdown")
-#' @return tables of results and statistics
-#'    table contains table of cases, time at risk and incidence rate
-#'    split along category exposed/unexposed.
-#'    If option output = "rmarkdown", then no return but markdown
-#'    tables are printed.
+#' @return a list of tables of results and statistics
+#'    \itemize{
+#'    \item table: contains table of cases, time at risk and incidence
+#'          split along category exposed/unexposed.
+#'    \item stats: contains difference of ir between exposed/unexposed,
+#'    ir ratios between exposed/unexposed, attributable fraction exposed
+#'    and attributable fraction of population.
+#'    }
+#'    If option output = "rmarkdown" is chosen, then no return but markdown
+#'    tables are printed. The default output="plain" returns two matrices with
+#'    the results for further processing.
 #'
 #' @keywords epidemiology
 #' @export
@@ -30,9 +36,9 @@ ir <- function(cases, exposure, time,
   time.total <- sum(time)
 
 
-  inc.rate0 <- case0/time0
-  inc.rate1 <- case1/time1
-  inc.rate.total <- case.total/time.total
+  inc.rate0 <- case0/time0 # incidence rate for unexposed subjects
+  inc.rate1 <- case1/time1 # incidence rate for exposed subjects
+  inc.rate.total <- case.total/time.total # incidence rates for all subjects
 
   table <- matrix(c(case0, case1, case.total,
                     time0, time1, time.total,
@@ -58,9 +64,9 @@ ir <- function(cases, exposure, time,
   if (output == "plain") {
     return(results)
   } else if (output == "rmarkdown") {
-    pandoc.table(table, style="rmarkdown")
+    pander::pandoc.table(table, style="rmarkdown")
     cat("\n")
-    pandoc.table(stats, style="rmarkdown")
+    pander::pandoc.table(stats, style="rmarkdown")
   } else {
     stop("Output option not recognized.")
   }

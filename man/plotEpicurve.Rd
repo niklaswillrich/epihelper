@@ -4,11 +4,10 @@
 \alias{plotEpicurve}
 \title{Create an epicurve plot}
 \usage{
-plotEpicurve(dates = "Date", data = Linelist, unitOfTimeInDays = 1,
-  unitOfLabel = "1 week", xTitle = "Date", yTitle = "Number of cases",
-  plotTitle = "none", boxes = "auto", group = "none",
-  groupHeading = " ", groupColor = c("#345A8A", "#4F81BD", "grey"),
-  fillColor = "steelblue")
+plotEpicurve(data, dates, unitOfTimeInDays = 1, unitOfLabel = "1 week",
+  xTitle = "Date", yTitle = "Number of cases", plotTitle = "none",
+  boxes = "auto", group = "none", groupHeading = " ",
+  groupColor = c("#345A8A", "#4F81BD", "grey"), fillColor = "steelblue")
 }
 \arguments{
 \item{dates}{date vector}

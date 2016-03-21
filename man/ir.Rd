@@ -4,14 +4,14 @@
 \alias{ir}
 \title{Calculate table for incidence data}
 \usage{
-ir(cases, exposure, time, output = "plain", digits = 2)
+ir(cases, exposure, time, output = "plain")
 }
 \arguments{
 \item{cases}{string of case variable}
 
 \item{exposure}{string of exposure variable}
 
-\item{time}{time of exposure for subjects}
+\item{time}{time at risk for subjects}
 
 \item{output}{type of table output ( e.g. "plain", "rmarkdown")}
 
@@ -19,13 +19,20 @@ ir(cases, exposure, time, output = "plain", digits = 2)
 }
 \value{
 tables of results and statistics
-   table contains table of cases, time at risk and incidence rate
-   split along category exposed/unexposed.
-   If option output = "rmarkdown", then no return but markdown
-   tables are printed.
+   \itemize{
+   \item table: contains table of cases, time at risk and incidence
+         split along category exposed/unexposed.
+   \item stats: contains difference of ir between exposed/unexposed,
+   ir ratios between exposed/unexposed, attributable fraction exposed
+   and attributable fraction of population.
+   }
+   If option output = "rmarkdown" is chosen, then no return but markdown
+   tables are printed. The default output="plain" returns two matrices with
+   the results for further processing.
 }
 \description{
-This function gives a table of results for incidence data
+This function gives a table of results for incidence data.
+The results are comparable to the ir function in Stata.
 }
 \keyword{epidemiology}
 
