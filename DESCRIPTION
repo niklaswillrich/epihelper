@@ -8,7 +8,8 @@ Depends:
 License: GPL-2
 LazyData: true
 RoxygenNote: 5.0.1
+Imports: pander, ggplot2
 Suggests: knitr,
-    rmarkdown, pander,
+    rmarkdown,
     testthat
 VignetteBuilder: knitr

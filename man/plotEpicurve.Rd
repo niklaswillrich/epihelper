@@ -10,11 +10,28 @@ plotEpicurve(data, dates, unitOfTimeInDays = 1, unitOfLabel = "1 week",
   groupColor = c("#345A8A", "#4F81BD", "grey"), fillColor = "steelblue")
 }
 \arguments{
-\item{dates}{date vector}
+\item{data}{data frame which includes dates vector}
+
+\item{dates}{name of the dates column (string)}
 
 \item{unitOfTimeInDays}{numeric vector giving bin size}
 
 \item{unitOfLabel}{character vector giving label}
+
+\item{xTitle}{title of x-axis}
+
+\item{yTitle}{title of y-axis}
+
+\item{plotTitle}{title of plot}
+
+\item{boxes}{indicates whether to show boxes for cases}
+
+\item{group}{vector of group membership or "none". Groups are
+shown in different colors.}
+
+\item{groupColor}{list of group colors}
+
+\item{fillcolor}{color of fill}
 }
 \description{
 A function to create an epicurve according to EPIET standards

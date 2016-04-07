@@ -18,7 +18,7 @@ ir(cases, exposure, time, output = "plain")
 \item{data}{data frame we are working on}
 }
 \value{
-tables of results and statistics
+a list of tables of results and statistics
    \itemize{
    \item table: contains table of cases, time at risk and incidence
          split along category exposed/unexposed.
@@ -34,5 +34,7 @@ tables of results and statistics
 This function gives a table of results for incidence data.
 The results are comparable to the ir function in Stata.
 }
-\keyword{epidemiology}
+\keyword{epidemiology,}
+\keyword{incidence}
+\keyword{rate}
 

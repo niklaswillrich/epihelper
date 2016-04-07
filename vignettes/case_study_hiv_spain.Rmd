@@ -10,7 +10,7 @@ vignette: >
 ---
 
 
-This is the R version of original Stata-File
+_This is the R version of an original Stata-based case study prepared by Alicia Barrasa and Ioannis Karagiannis, based on the original case study developed in 2009 by Alicia Barrasa, Costas Danis, Manuel Dehnert, Johannes Dreesman, Matthias an der Heiden, Harold Noël-Placidoux, Ioannis Karagiannis and David Prieto_
 
 _this would be the place for the introduction to the case study_
 
@@ -23,6 +23,7 @@ _this would be the place for the introduction to the case study_
 # require(dplyr) # Data manipulation
 # require(survival) # Advanced regression analysis for survival analysis
 # require(ggplot2) # Plotting
+# require(epiet) # various helper functions for epidemiologists
 
 # Set the correct directory
 # setwd("~/Documents/Projekte/epiet")
@@ -57,15 +58,16 @@ hiv.data.sum <- hiv.data %>%
 ## Save the data in a file
 ```{r}
 save.image("HIVexample2015poisson.Rdata")
-
-# .Rsv was just my invention. If .Rdata is the standard
-# we can use this.
 ```
 
 
 
-## TODO: NOT SOLVED YET
-ir seroco idu denom
+## Show table of incidence rates along exposure idu and exposure time denom
+```{r}
+ir(hiv.data.sum$seroco, 
+   hiv.data.sum$idu,
+   hiv.data.sum$denom, output="rmarkdown")
+```
 
 ## Poisson regression
 ```{r}

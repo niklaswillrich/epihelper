@@ -20,13 +20,19 @@
 #'    tables are printed. The default output="plain" returns two matrices with
 #'    the results for further processing.
 #'
-#' @keywords epidemiology
+#' @keywords epidemiology, incidence rate
 #' @export
 ir <- function(cases, exposure, time,
                output = "plain") {
   # TODO add confidence intervals for estimated characteristics
   # TODO add sanity checks and more options for displaying tables
   # TODO add option for stratifying by some other variable
+
+  n.exact <- 200 # critical value of observations below
+                 # which to choose the exact method.
+  alpha <- 0.05 # confidence level for intervals
+
+
   case0 <- sum(cases[exposure == 0])
   case1 <- sum(cases[exposure == 1])
   time0 <- sum(time[exposure == 0])
@@ -51,9 +57,38 @@ ir <- function(cases, exposure, time,
   inc.ratio <- inc.rate1/inc.rate0
   attr.frac.ex <- (inc.rate1-inc.rate0)/inc.rate1
   attr.frac.pop <- 1- inc.rate0/inc.rate.total
-  stats= matrix(c(inc.diff=inc.diff, inc.ratio=inc.ratio,
-                  attr.frac.ex=attr.frac.ex,
-                  attr.frac.pop=attr.frac.pop), ncol=1)
+
+  inc.diff.var <- (case1/time1^2 + case0/time0^2)^(1/2)
+  ci.inc.diff <- c(
+        inc.rate1-inc.rate0 + qnorm(alpha/2)*inc.diff.var,
+        inc.rate1-inc.rate0 + qnorm(1-alpha/2)*inc.diff.var
+        )
+
+  if (FALSE) {
+      # NOT IMPLEMENTED YET
+      # TODO implement calculations for exact confidence intervals
+    # exact confidence intervals
+    # ci.inc.ratio.lower <- uniroot(function(p) 1 - (dbinom(aa, mm, p)/2 +
+    #                                                    pbinom(aa-1, mm, p)) -
+    #                                                     alpha/2, c(0, 1))$root
+    # # poisson approximation
+    # ci.inc.ratio <- time0/time1*case1/(case0+1)*1/(qf(alpha/2,2*(case0+1),2*case1))
+    #  time0/time1*(case1+1)/case0*1/(qf(1-alpha/2,2*(case1+1),2*case0))
+
+  } else {
+      # Wald-type estimation
+        ci.inc.ratio <- c(
+          exp(log(inc.ratio) + qnorm(0.025)*(1/case1+1/case0)),
+          exp(log(inc.ratio) + qnorm(0.975)*(1/case1+1/case0)))
+
+  }
+
+
+
+  stats <- rbind(c(inc.diff,ci.inc.diff),
+            c(inc.ratio, ci.inc.ratio),
+            c(attr.frac.ex,"-", "-"),
+            c(attr.frac.pop, "-", "-"))
   rownames(stats) <-
     c("IR difference", "IR ratio",
       "Attr. frac. exposed", "Attr. frac. pop.")
