@@ -1,6 +1,6 @@
 
 # In development 
-Documentation at http://rforepiet.github.io/epiet/. This package is still under active development and not ready for production yet. The code and documentation may change day to day. We would be happy to recieve feedback.
+ This package is still under active development and not ready for production yet. The code and documentation may change day to day. We would be happy to receive feedback.
 
 
 # Functions so far
