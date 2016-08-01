@@ -107,18 +107,18 @@ plotEpicurve <- function(data,
     ################################################################
     # Add the scale of the x-axis
     ################################################################
-    p <- p +  ggplot2::scale_x_datetime(breaks = scales::date_breaks(unitOfLabel), labels = date_format("%d.%m"))
+    p <- p +
+        ggplot2::scale_x_datetime(breaks = scales::date_breaks(unitOfLabel), labels = date_format("%d.%m"))
 
     ################################################################
     # Change theme
     ################################################################
-    p <- p +  theme_classic()
+    p <- p +  ggplot2::theme_classic()
 
     ################################################################
     # Add text
     ################################################################
-    p <- p + ggplot2::xlab(xTitle)
-    p <- p + ggplot2::ylab(yTitle)
+    p <- p + ggplot2::xlab(xTitle) + ggplot2::ylab(yTitle)
     if(plotTitle!="none") {
         p <- p + ggplot2::ggtitle(plotTitle)
     }

@@ -7,7 +7,7 @@ this is a wrapper function for producing nice
 output tables with the stargazer package adapted
  to the needs of an epidemiologist.}
 \usage{
-multitable(..., output = "text")
+multitable(..., padding = "3px")
 }
 \description{
 Show tables of multiple models

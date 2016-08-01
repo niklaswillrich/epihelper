@@ -7,7 +7,7 @@
 #' @param cases string of case variable
 #' @param exposure string of exposure variable
 #' @param time time at risk for subjects
-#' @param output type of table output ( e.g. "plain", "rmarkdown")
+#' @param output type of table output ( e.g. "plain", "html")
 #' @return a list of tables of results and statistics
 #'    \itemize{
 #'    \item table: contains table of cases, time at risk and incidence
@@ -16,14 +16,15 @@
 #'    ir ratios between exposed/unexposed, attributable fraction exposed
 #'    and attributable fraction of population.
 #'    }
-#'    If option output = "rmarkdown" is chosen, then no return but markdown
+#'    If option output = "html" is chosen, then no return but html
 #'    tables are printed. The default output="plain" returns two matrices with
 #'    the results for further processing.
 #'
 #' @keywords epidemiology, incidence rate
 #' @export
-ir <- function(cases, exposure, time,
-               output = "plain") {
+ir <- function(data, case.var, exposure.var, time.var,
+               output = "plain", digits = 2,
+               alpha = 0.05, n.exact = 200) {
   # TODO add confidence intervals for estimated characteristics
   # TODO add sanity checks and more options for displaying tables
   # TODO add option for stratifying by some other variable
@@ -32,6 +33,10 @@ ir <- function(cases, exposure, time,
                  # which to choose the exact method.
   alpha <- 0.05 # confidence level for intervals
 
+
+  cases <- data[,case.var]
+  exposure <- data[,exposure.var]
+  time <- data[,time.var]
 
   case0 <- sum(cases[exposure == 0])
   case1 <- sum(cases[exposure == 1])
@@ -56,7 +61,7 @@ ir <- function(cases, exposure, time,
   inc.diff <- inc.rate1-inc.rate0
   inc.ratio <- inc.rate1/inc.rate0
   attr.frac.ex <- (inc.rate1-inc.rate0)/inc.rate1
-  attr.frac.pop <- 1- inc.rate0/inc.rate.total
+  attr.frac.pop <- 1 - inc.rate0/inc.rate.total
 
   inc.diff.var <- (case1/time1^2 + case0/time0^2)^(1/2)
   ci.inc.diff <- c(
@@ -78,8 +83,8 @@ ir <- function(cases, exposure, time,
   } else {
       # Wald-type estimation
         ci.inc.ratio <- c(
-          exp(log(inc.ratio) + qnorm(0.025)*(1/case1+1/case0)),
-          exp(log(inc.ratio) + qnorm(0.975)*(1/case1+1/case0)))
+          exp(log(inc.ratio) + qnorm(alpha/2)*(1/case1+1/case0)),
+          exp(log(inc.ratio) + qnorm(1-alpha/2)*(1/case1+1/case0)))
 
   }
 
@@ -87,21 +92,26 @@ ir <- function(cases, exposure, time,
 
   stats <- rbind(c(inc.diff,ci.inc.diff),
             c(inc.ratio, ci.inc.ratio),
-            c(attr.frac.ex,"-", "-"),
-            c(attr.frac.pop, "-", "-"))
+            c(attr.frac.ex,NA, NA),
+            c(attr.frac.pop, NA, NA))
   rownames(stats) <-
     c("IR difference", "IR ratio",
       "Attr. frac. exposed", "Attr. frac. pop.")
+  colnames(stats) <- c("Value", "CI.lower", "CI.upper")
   results <- list(
     table=table,
     stats=stats
   )
   if (output == "plain") {
     return(results)
-  } else if (output == "rmarkdown") {
-    pander::pandoc.table(table, style="rmarkdown")
-    cat("\n")
-    pander::pandoc.table(stats, style="rmarkdown")
+  } else if (output == "html") {
+    # pander::pandoc.table(table, style="rmarkdown")
+    # cat("\n")
+    # pander::pandoc.table(stats, style="rmarkdown")
+      stargazer::stargazer(table, type ="html",
+                           digits = digits)
+      stargazer::stargazer(stats, type ="html",
+                           digits = 2, digits.extra = 2)
   } else {
     stop("Output option not recognized.")
   }

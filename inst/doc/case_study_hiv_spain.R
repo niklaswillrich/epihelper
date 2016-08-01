@@ -7,7 +7,7 @@
 # require(ggplot2) # Plotting
 
 # Set the correct directory
-# setwd("~/Documents/Projekte/epiet")
+# setwd("~/Documents/Projekte/epihelper")
 
 # Set knitr options to not evaluate anything
 knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, comment=FALSE)
@@ -23,13 +23,13 @@ knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, com
 #  hiv.data$denom[hiv.data$seroco == 1] <-
 #    (hiv.data$first_pos[hiv.data$seroco == 1]-
 #       hiv.data$first_test[hiv.data$seroco == 1])/365.25
-#  
-#  
-#  
+#
+#
+#
 #  # What about this way? I dont have the dataset, but I think it should work (Jakob)
 #  hiv.data %>%
 #      mutate(denom = ifelse(seroco==0, (last_neg - first_test)/365.25, (first_pos - first_test)/365.25 ))
-#  
+#
 
 ## ------------------------------------------------------------------------
 #  hiv.data.sum <- hiv.data %>%
@@ -38,7 +38,7 @@ knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, com
 
 ## ------------------------------------------------------------------------
 #  save.image("HIVexample2015poisson.Rsv")
-#  
+#
 #  # Why do you save it in a Rsv file and not a Rdata file (Jakob)
 
 ## ------------------------------------------------------------------------
@@ -48,36 +48,36 @@ knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, com
 #  exp(poisson.reg$coefficients[[2]]) # same result as for Stata case
 #  poisson.reg
 #  confint(poisson.reg)
-#  
+#
 #  ggplot(hiv.data.sum, aes(seroco.sum)) +
 #    geom_histogram(binwidth = 5, origin = 0,
 #                   right = FALSE, fill = "red")
 #  # slightly different from the stata-version, because we cannot specify
 #  # the values to be discrete.
-#  
+#
 #  poisson.reg.2 <- update(poisson.reg,
 #                          formula = seroco.sum ~ sex + age2 +sexwork)
-#  
+#
 #  poisson.reg.3 <-
 #    glm(seroco.sum ~ sex + age2 + idu , family = poisson(link = "log"),
 #        data = hiv.data.sum, offset = log(denom.sum))
-#  
+#
 #  poisson.reg.4 <- update(poisson.reg,
 #                          formula = seroco.sum ~ sex + age2 + sexwork + idu + msm )
-#  
+#
 #  poisson.reg.5 <- update(poisson.reg,
 #                          formula = seroco.sum ~ sex + age2 + sexwork + idu )
-#  
+#
 #  poisson.reg.6 <- update(poisson.reg,
 #                         formula = seroco.sum ~ sex + age2 + sexwork + msm  )
-#  
+#
 #  poisson.reg.7 <- update(poisson.reg,
 #                          formula = seroco.sum ~ sex + age2 + idu + msm )
-#  
+#
 #  poisson.reg.7 <-
 #    glm(seroco.sum ~ sex + age2 + idu*sex + msm , family = poisson(link = "log"),
 #        data = hiv.data.sum, offset = log(denom.sum))
-#  
+#
 
 ## ------------------------------------------------------------------------
 #  cols <- c("Observed values"="#f04546","Predicted values"="#3591d1")
@@ -93,10 +93,10 @@ knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, com
 #  cox.reg <- coxph(Surv(denom, seroco) ~ idu+sex, data = hiv.data)
 #  cox.reg.2 <- coxph(Surv(denom, seroco) ~ idu*msm + age + factor(centrocod),
 #                   data = hiv.data)
-#  
+#
 #  cox.reg.strata <- coxph(Surv(denom, seroco) ~ idu*msm + age + strata(centrocod),
 #                          data = hiv.data)
-#  
+#
 
 ## ------------------------------------------------------------------------
 #  cox.zph(cox.reg.2)

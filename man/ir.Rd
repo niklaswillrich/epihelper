@@ -4,18 +4,19 @@
 \alias{ir}
 \title{Calculate table for incidence data}
 \usage{
-ir(cases, exposure, time, output = "plain")
+ir(data, case.var, exposure.var, time.var, output = "plain", digits = 2,
+  alpha = 0.05, n.exact = 200)
 }
 \arguments{
+\item{data}{data frame we are working on}
+
+\item{output}{type of table output ( e.g. "plain", "html")}
+
 \item{cases}{string of case variable}
 
 \item{exposure}{string of exposure variable}
 
 \item{time}{time at risk for subjects}
-
-\item{output}{type of table output ( e.g. "plain", "rmarkdown")}
-
-\item{data}{data frame we are working on}
 }
 \value{
 a list of tables of results and statistics
@@ -26,7 +27,7 @@ a list of tables of results and statistics
    ir ratios between exposed/unexposed, attributable fraction exposed
    and attributable fraction of population.
    }
-   If option output = "rmarkdown" is chosen, then no return but markdown
+   If option output = "html" is chosen, then no return but html
    tables are printed. The default output="plain" returns two matrices with
    the results for further processing.
 }

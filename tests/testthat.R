@@ -1,4 +1,4 @@
 library(testthat)
-library(epiet)
+library(epihelper)
 
-test_check("epiet")
+test_check("epihelper")

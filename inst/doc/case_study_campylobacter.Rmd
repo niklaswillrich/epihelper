@@ -91,10 +91,10 @@ For your convenience, here’s a list of the variables in the dataset:
 #### Help Task 2
 ```{r}
 # Set the correct directory
-#setwd("~/Documents/Projekte/epiet")
+#setwd("~/Documents/Projekte/epihelper")
 
-# Initalize the epiet package
-library(epiet)
+# Initalize the epihelper package
+library(epihelper)
 
 # Load data
 load(campy)

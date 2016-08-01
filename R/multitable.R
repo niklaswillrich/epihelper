@@ -7,7 +7,7 @@
 #'
 
 
-multitable <- function(..., output="text") {
+multitable <- function(..., padding="3px") {
 # todo use stargazer to get a table
-    stargazer(..., type=output)
+    stargazer(...)
 }

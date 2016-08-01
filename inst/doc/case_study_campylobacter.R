@@ -4,11 +4,11 @@ knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, com
 
 ## ------------------------------------------------------------------------
 #  # Set the correct directory
-#  #setwd("~/Documents/Projekte/epiet")
-#  
-#  # Initalize the epiet package
-#  library(epiet)
-#  
+#  #setwd("~/Documents/Projekte/epihelper")
+#
+#  # Initalize the epihelper package
+#  library(epihelper)
+#
 #  # Load data
 #  load(campy)
 
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, com
 
 ## ------------------------------------------------------------------------
 #  campy$diluted <- ifelse(campy$concentrated==1 | campy$powder==1, 1, 0)
-#  
+#
 #  # stata commands
 #  # generate diluted = 1 if concentrated==1 | powder==1
 #  # replace diluted = 0 if concentrated==0 & powder==0
@@ -36,7 +36,7 @@ knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, com
 #  ranksum age, by(case)
 #  If you had gone for the t-test, the command would have been:
 #  ttest age, by(case)
-#  
+#
 
 ## ------------------------------------------------------------------------
 #  plotEpicurve()
@@ -54,5 +54,5 @@ knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, com
 #  #  Adding the options col or row, which would provide you the percentages by column or row
 #  # respectively, can help you identify the direction of the association.
 #  # The results (odds ratios and 95% confidence intervals) for the univariate analysis are shown in Table 5 on the next page.
-#  
+#
 

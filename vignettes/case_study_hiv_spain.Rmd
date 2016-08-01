@@ -23,10 +23,10 @@ _this would be the place for the introduction to the case study_
 # require(dplyr) # Data manipulation
 # require(survival) # Advanced regression analysis for survival analysis
 # require(ggplot2) # Plotting
-# require(epiet) # various helper functions for epidemiologists
+# require(epihelper) # various helper functions for epidemiologists
 
 # Set the correct directory
-# setwd("~/Documents/Projekte/epiet")
+# setwd("~/Documents/Projekte/epihelper")
 
 # Set knitr options to not evaluate anything
 knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, comment=FALSE)

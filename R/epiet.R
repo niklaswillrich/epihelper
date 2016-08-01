@@ -1,11 +1,11 @@
-#' epiet: A package for computating infectious disease data.
+#' epihelper: A package for computing with infectious disease data.
 #'
-#' The \strong{epiet} package
+#' The \strong{epihelper package
 #'
-#' @section epiet functions:
+#' @section epihelper functions:
 #' \code{\link{generateOutbreak}}:
 #'
 #' @docType package
-#' @name epiet
+#' @name epihelper
 NULL
 #> NULL

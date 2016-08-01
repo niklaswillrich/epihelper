@@ -25,7 +25,7 @@ _this would be the place for the introduction to the case study_
 # require(ggplot2) # Plotting
 
 # Set the correct directory
-# setwd("~/Documents/Projekte/epiet")
+# setwd("~/Documents/Projekte/epihelper")
 
 # Set knitr options to not evaluate anything
 knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, comment=FALSE)
