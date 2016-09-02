@@ -19,6 +19,7 @@
 #' @export
 
 cs <- function(data, case.var, exposure.var,
+               strata = NULL,
                output = "plain",
                digits = 2) {
 
@@ -29,7 +30,7 @@ cs <- function(data, case.var, exposure.var,
     exposure <- data[,exposure.var]
 
     results <- list()
-    .binary.check(cases, exposure)
+    .binary_check(cases, exposure)
     # calculate the contingency table with margins
     table <- addmargins(table(cases, exposure))
     colnames(table) <- c("Not exposed", "Exposed",

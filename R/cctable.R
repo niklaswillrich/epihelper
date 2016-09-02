@@ -4,19 +4,19 @@
 #' @param cases string of case variable
 #' @param exposure vector of strings of exposure variables
 #' @param digits number of digits in tables and printed output
-#' @param output type of table output ( e.g. "plain", "html")
+#' @param output type of table output ( e.g. "plain", "html", "fancy")
 #' @return table of results and statistics
-#'    If option output = "html" is chosen, then no return but html
-#'    tables are printed. The default output="plain" returns two matrices with
-#'    the results for further processing.
+#'    If option output = "html" is chosen, then html
+#'    table is printed. The default output="plain" returns a matrix with
+#'    the results for further processing. If output ="fancy", the function
+#'    returns a DT-datatable with interactive features.
 #'
 #' @keywords epidemiology, case control, table
 #' @export
 cctable <- function(data, case.var, exposure.vars,
                     output = "plain", digits = 2) {
 
-    stopifnot(is.character(case.var),
-            all(sapply(exposure.vars, is.character)))
+    .check_all_characters(case.var,exposure.vars)
     results.list <- plyr::llply(exposure.vars,
           function(exposure.var)
               cc(data,case.var, exposure.var,
@@ -44,7 +44,7 @@ cctable <- function(data, case.var, exposure.vars,
                            "P.value")
     results.df[, 2:dim(results.df)[2]] <-
         sapply(results.df[, 2:dim(results.df)[2]], as.numeric)
-    results.df <- results.df %>% dplyr::arrange(P.value)
+    results.df <- results.df %>% dplyr::arrange_("P.value")
     # order by lowest p-value
     # return output
     if (output == "plain") {
@@ -60,15 +60,16 @@ cctable <- function(data, case.var, exposure.vars,
         return(invisible(results.df))
     } else if (output == "fancy") {
         fancy.table <- DT::datatable(results.df) %>%
-            formatRound(c(4,7:(dim(results.df)[2]-1)), 2) %>%            formatStyle(
+            DT::formatRound(c(4,7:(dim(results.df)[2]-1)), 2) %>%            formatStyle(
                 'Cases prop. exp.',
-                background = styleColorBar(c(0,1), 'lightgreen'),
+                background = DT::styleColorBar(c(0,1), 'Tomato',
+                                           angle = -90),
                 backgroundPosition = 'left'
-            ) %>%            formatStyle(
+            ) %>%            DT::formatStyle(
                 'Controls prop. exp.',
-                background = styleColorBar(c(0,1), 'lightgreen')
+                background = DT::styleColorBar(c(0,1), 'lightgreen',
+                                           angle = -90)
             )
-            format
         return(fancy.table)
     } else {
         stop("Output type not implemented!")

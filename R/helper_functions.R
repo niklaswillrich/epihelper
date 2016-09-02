@@ -92,19 +92,6 @@
 }
 
 
-## function to check values of exposure and case
-## variables if they only contain 0,1 and NA
-## for the cs, cc function
-
-.binary.check <- function(cases, exposure) {
-    if (!(
-        all(cases == 0 | cases == 1 | is.na(cases)) &
-        all(exposure == 0 | exposure == 1 | is.na(exposure))
-        )) {
-        stop(paste("Cases", case.var, "and exposure",
-                   exposure.var, "must be encoded 1/0"))
-    }
-}
 
 
 ## function to calculate Mantel-Haenszel odds ratio
@@ -119,10 +106,24 @@ check.df.equality <- function(line, df) {
 }
 
 ## function to calculate Mantel-Haenszel risk ratio
+## input
+## cases - vector of cases coded as 0,1
+## exposure - vector of exposure coded as 0,1
+##
 .mh.rr.fct <- function(cases, exposure, strata, alpha = 0.05) {
     # ME, Greenland et al, p. 275, 3rd Ed.
     # calculate the individual rr's in the strata
+    if (!is.data.frame(strata)) as.data.frame(strata)
+
+
+    # TODO filter if there is an NA in one of the variables
+    ind.filtered <- filter.na(cases, exposure, strata)
+    cases <- cases[-ind.filtered]
+    exposure <- exposure[-ind.filtered]
+    strata <- as.data.frame(strata[-ind.filtered,])
+
     stratum.defs <- na.omit(unique(strata))
+
     rr.stratified <- t(apply(stratum.defs,1,
            function(stratum) {
 
@@ -136,7 +137,7 @@ check.df.equality <- function(line, df) {
     ))
 
     # calculate key quantities for strata
-
+    # TODO change calculations to deal in a consistent way with missing values
     # number of unexposed
     N0 <- apply(stratum.defs,1,
                function(stratum)
@@ -169,6 +170,7 @@ check.df.equality <- function(line, df) {
 
 
     mh.weights <- A0*N1/N.tot
+    inv.mh.weights <- A1*N0/N.tot
 
     individual.rr.table <-
         cbind(stratum.defs, rr.stratified, mh.weights)
@@ -176,11 +178,7 @@ check.df.equality <- function(line, df) {
     rr.mh <-
         sum(mh.weights/sum(mh.weights)*rr.stratified[,1])
 
-
-
-    inv.mh.weights <- A1*N0/N.tot
-
-    var.log.rr.mh <- sum(M1*N1*N0/N.tot^2 - A1*A0/N.tot)/
+    var.log.rr.mh <- sum((M1*N1*N0 - A1*A0*N.tot)/N.tot^2)/
         (sum(mh.weights)*sum(inv.mh.weights))
 
     ci.rr.mh.lower <- exp(log(rr.mh) + qnorm(alpha/2)*var.log.rr.mh^(1/2))
@@ -189,8 +187,6 @@ check.df.equality <- function(line, df) {
     rr.crude <- .rr.fct(table(cases,
                               exposure))
 
-    # TODO check the small difference between the values in
-    # Stata and R
     # TODO implement chi square test of homogeneity
     return(
         list(

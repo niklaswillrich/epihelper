@@ -35,7 +35,7 @@ cc <- function(data, case.var, exposure.var,
     results <- list()
 
     # check if cases and exposure are encoded 1/0
-    .binary.check(cases, exposure)
+    .binary_check(cases, exposure)
 
     table <- addmargins(table(cases, exposure))
     prop.exposed <- table[,2]/table[,3]
