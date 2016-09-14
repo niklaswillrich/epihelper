@@ -14,7 +14,7 @@
     value <- (table[2,2]/table[1,2])/
         (table[2,1]/table[1,1])
     if(ci.type == "exact")
-    conf.int <- fisher.test(table[1:2,1:2],
+    conf.int <- stats::fisher.test(table[1:2,1:2],
                             conf.level = 1-alpha)$conf.int
     return(list(
         value = value,
@@ -42,8 +42,8 @@
         table[2,1]*table[1,1]/
         ((table[2,1]+table[1,1])^2*(table[2,1]+table[1,1]))
         )^(1/2)
-    ci.risk.diff.lower <- risk.diff + qnorm(alpha/2)*sd.risk.diff
-    ci.risk.diff.upper <- risk.diff + qnorm(1-alpha/2)*sd.risk.diff
+    ci.risk.diff.lower <- risk.diff + stats::qnorm(alpha/2)*sd.risk.diff
+    ci.risk.diff.upper <- risk.diff + stats::qnorm(1-alpha/2)*sd.risk.diff
     value <- risk.diff
     conf.int <- c(ci.risk.diff.lower, ci.risk.diff.upper)
     return(list(
@@ -74,15 +74,15 @@
 # conf.int - confidence interval of type ci.type
 # to the level alpha
 .rr.fct <- function(table,
-                    ci.type = "exact",
+                    ci.type = "wald",
                     alpha = 0.05) {
 
     risk.ratio <- .rr.value.fct(table)
     sd.log.risk.ratio <- (1/table[2,2] - 1/(table[2,2]+table[1,2]) +
                            1/table[2,1] - 1/(table[2,1]+table[1,1]))^(1/2)
 
-    ci.risk.ratio.lower <- exp(log(risk.ratio) + qnorm(alpha/2)*sd.log.risk.ratio)
-    ci.risk.ratio.upper <- exp(log(risk.ratio) + qnorm(1-alpha/2)*sd.log.risk.ratio)
+    ci.risk.ratio.lower <- exp(log(risk.ratio) + stats::qnorm(alpha/2)*sd.log.risk.ratio)
+    ci.risk.ratio.upper <- exp(log(risk.ratio) + stats::qnorm(1-alpha/2)*sd.log.risk.ratio)
     value <- risk.ratio
     conf.int <- c(ci.risk.ratio.lower, ci.risk.ratio.upper)
     return(list(
@@ -96,7 +96,7 @@
 
 ## function to calculate Mantel-Haenszel odds ratio
 .mh.or.fct <- function(cases, exposure, strata) {
-
+    #TODO finish mantel haenszel OR function
 }
 
 # function to check which rows of a data frame are
@@ -122,7 +122,7 @@ check.df.equality <- function(line, df) {
     exposure <- exposure[-ind.filtered]
     strata <- as.data.frame(strata[-ind.filtered,])
 
-    stratum.defs <- na.omit(unique(strata))
+    stratum.defs <- stats::na.omit(unique(strata))
 
     rr.stratified <- t(apply(stratum.defs,1,
            function(stratum) {
@@ -137,7 +137,6 @@ check.df.equality <- function(line, df) {
     ))
 
     # calculate key quantities for strata
-    # TODO change calculations to deal in a consistent way with missing values
     # number of unexposed
     N0 <- apply(stratum.defs,1,
                function(stratum)
@@ -181,8 +180,8 @@ check.df.equality <- function(line, df) {
     var.log.rr.mh <- sum((M1*N1*N0 - A1*A0*N.tot)/N.tot^2)/
         (sum(mh.weights)*sum(inv.mh.weights))
 
-    ci.rr.mh.lower <- exp(log(rr.mh) + qnorm(alpha/2)*var.log.rr.mh^(1/2))
-    ci.rr.mh.upper <- exp(log(rr.mh) + qnorm(1-alpha/2)*var.log.rr.mh^(1/2))
+    ci.rr.mh.lower <- exp(log(rr.mh) + stats::qnorm(alpha/2)*var.log.rr.mh^(1/2))
+    ci.rr.mh.upper <- exp(log(rr.mh) + stats::qnorm(1-alpha/2)*var.log.rr.mh^(1/2))
 
     rr.crude <- .rr.fct(table(cases,
                               exposure))

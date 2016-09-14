@@ -35,7 +35,7 @@ filter.na <- function(...) {
                          function(item)
                              dim(item)[1] == dim(input[[1]])[1])))
     data.comb <- Reduce(bind_cols, input, NULL)
-    omitted <- na.omit(data.comb)
+    omitted <- stats::na.omit(data.comb)
     return(attr(omitted, "na.action"))
 }
 

@@ -10,7 +10,7 @@ vignette: >
 ---
 ```{r, warning=FALSE, message=FALSE, error=FALSE, comment=FALSE, echo=FALSE}
 # Set knitr options to not evaluate anything
-knitr::opts_chunk$set(eval=FALSE, warning=FALSE, message=FALSE, error=FALSE, comment=FALSE)
+knitr::opts_chunk$set(eval=T, warning=FALSE, message=FALSE, error=FALSE, comment=FALSE)
 ```
 
 #Introduction
@@ -50,10 +50,10 @@ You conduct a case-control study in order to identify the mode and vehicle of tr
 For the rest of this exercise, you will be presented and working with a set of the variables used in the outbreak investigation. All variables presented here have to do with water consumption. The file campy.dta contains information on all cases (like with the Excel file we were using previously), as well as the selected controls.
 
 
-#Analytical epidemiology
+# Analytical epidemiology
 The rest of the case study will be dealing with the analytical epidemiology as part of the outbreak investigation. This consists of univariate and stratified analysis of the case-control study.
 The dataset campy.xls contains twenty variables. The first few ones contain demographic information of participants (cases and controls) and the next ones provide information on different exposures directly or indirectly linked to tap water consumption.
-For your convenience, here’s a list of the variables in the dataset:
+For your convenience, here's a list of the variables in the dataset:
 
 - id: ID of the questionnaire
 - case: case or control
@@ -65,14 +65,14 @@ For your convenience, here’s a list of the variables in the dataset:
 - filter: do you use a filter for tap water at home?
 - well: do you have a well to get water in your property?
 - pacifier1: do you use a pacifier?
-- pacifier2: is the child’s pacifier washed with tap water? (if applicable)
-- dishwasher: do you use the dishwasher for children’s utensils? (if applicable) - microwave1: do you use the microwave to prepare the child’s milk?
-- microwave2: do you use the microwave to prepare the child’s food?
+- pacifier2: is the child's pacifier washed with tap water? (if applicable)
+- dishwasher: do you use the dishwasher for children's utensils? (if applicable) - microwave1: do you use the microwave to prepare the child's milk?
+- microwave2: do you use the microwave to prepare the child's food?
 - breastfeeding: does the child breastfeed?
 - concentrated: does the child drink concentrated milk?
 - powder: does the child drink powder milk?
 - freshmilk: does the child drink fresh milk?
-- dilutetap: is the child’s milk diluted with unboiled tap water?
+- dilutetap: is the child's milk diluted with unboiled tap water?
 
 > Task 2: Load the dataset
 
@@ -122,7 +122,7 @@ campy$diluted <- ifelse(campy$concentrated==1 | campy$powder==1, 1, 0)
 The new variable, diluted, contains the information whether a child has been consuming milk that needs to be diluted with water.
 
 #### Help, Task 5
-To see if the age distribution between cases and controls differs (which you might not expect, since you have frequency-matched for age), you can use either the t-test or the Wilcoxon’s ranksum test (also called the Mann-Whitney test). The first one can be used only when the distribution of age in both groups is normal. The latter one can be used otherwise.
+To see if the age distribution between cases and controls differs (which you might not expect, since you have frequency-matched for age), you can use either the t-test or the Wilcoxon's ranksum test (also called the Mann-Whitney test). The first one can be used only when the distribution of age in both groups is normal. The latter one can be used otherwise.
 ```{r}
 tabulate case
 bysort case: summarize age, detail
@@ -133,7 +133,7 @@ You can also visualise the distribution of age among cases and controls:
 histogram age if case==1, frequency
 histogram age if case==0, frequency
 Age does not appear to be very normally distributed.
-Now that you are absolutely sure that the hypothesis of normality in the variable age is not really the case, you choose to run Wilcoxon’s ranksum test2:
+Now that you are absolutely sure that the hypothesis of normality in the variable age is not really the case, you choose to run Wilcoxon's ranksum test2:
 ranksum age, by(case)
 If you had gone for the t-test, the command would have been:
 ttest age, by(case)
@@ -148,7 +148,7 @@ We would also like to construct an epidemic curve. There are a couple of ways to
 plotEpicurve()
 ```
 
-Packages are commands that have been written by R users, like you. This means that they are not included in Stata when you first install the program. Every time you need to run them for the first time on a new computer, you have to install them. If you know the name of the command you’re interested in, the easiest way is to type findit and the name of the command in the command line while you are online. Then, follow the instructions on your screen. If you are not allowed to do that, run sysdir in Stata, make a note of the “personal” folder and copy the .ado and .hlp files there (you may need to create the folder yourself). User- written commands you may be familiar with are: cctable, cstable, ccinter, csinter, epicurve, etc.
+Packages are commands that have been written by R users, like you. This means that they are not included in Stata when you first install the program. Every time you need to run them for the first time on a new computer, you have to install them. If you know the name of the command you're interested in, the easiest way is to type findit and the name of the command in the command line while you are online. Then, follow the instructions on your screen. If you are not allowed to do that, run sysdir in Stata, make a note of the “personal” folder and copy the .ado and .hlp files there (you may need to create the folder yourself). User- written commands you may be familiar with are: cctable, cstable, ccinter, csinter, epicurve, etc.
 
 
 
@@ -170,6 +170,7 @@ Now that you have already explored the data and performed some descriptive analy
 The appropriate measure of impact for a case-control study is the odds ratio (OR). This can be calculated with two different commands; cc and cctable3. The first one calculates the odds ratio, 95% confidence interval and the attributable fraction among the exposed and in the population. However, the 2x2 table is arranged in a different way than the one epidemiologists are used to working with (exposure in the rows, case/control in the columns).
 ```{r}
 # cc case breastfeeding
+campy %>% cc("case", "breastfeeding")
 # cc case dishwasher
 # cc case supply
 # cctable case supply

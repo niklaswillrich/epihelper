@@ -1,12 +1,12 @@
 #' Calculate table for case control data for multiple exposures
 #'
 #' @param data data frame we are working on
-#' @param cases string of case variable
-#' @param exposure vector of strings of exposure variables
-#' @param digits number of digits in tables and printed output
+#' @param case.var string of case variable
+#' @param exposure.vars vector of strings of exposure variables
 #' @param output type of table output ( e.g. "plain", "html", "fancy")
+#' @param digits number of digits after decimal point in tables and printed output
 #' @return table of results and statistics
-#'    If option output = "html" is chosen, then html
+#'    If option output = "html" is chosen, then an html
 #'    table is printed. The default output="plain" returns a matrix with
 #'    the results for further processing. If output ="fancy", the function
 #'    returns a DT-datatable with interactive features.

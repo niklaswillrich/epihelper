@@ -5,12 +5,14 @@
 \title{Calculate table for incidence data}
 \usage{
 ir(data, case.var, exposure.var, time.var, output = "plain", digits = 2,
-  alpha = 0.05, n.exact = 200)
+  alpha = 0.05)
 }
 \arguments{
 \item{data}{data frame we are working on}
 
 \item{output}{type of table output ( e.g. "plain", "html")}
+
+\item{digits}{number of digits to show after the decimal point}
 
 \item{cases}{string of case variable}
 

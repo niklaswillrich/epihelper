@@ -7,13 +7,17 @@
 #' @param cases string of case variable
 #' @param exposure string of exposure variable
 #' @param output type of table output ( e.g. "plain", "html")
+#' @param digits number of digits to show after the decimal point
+#' @param alpha alpha for confidence intervals
 #' @return a list of tables of results and statistics
 #'    \itemize{
 #'    \item contains TODO
 #'    }
-#'    If option output = "html" is chosen, then no return but html
-#'    tables are printed. The default output="plain" returns two matrices with
+#'    The default output="plain" returns two matrices with
 #'    the results for further processing.
+#'    If option output = "html" is chosen, an html-table is returned.
+#'    The table can be shown in Rmarkdown documents by including it in a
+#'    chunk with option ' results="asis" ' .
 #'
 #' @keywords epidemiology, cohort, relative risks
 #' @export
@@ -21,7 +25,8 @@
 cs <- function(data, case.var, exposure.var,
                strata = NULL,
                output = "plain",
-               digits = 2) {
+               digits = 2,
+               alpha = 0.05) {
 
     stopifnot(is.character(case.var),
               is.character(exposure.var))
@@ -32,7 +37,7 @@ cs <- function(data, case.var, exposure.var,
     results <- list()
     .binary_check(cases, exposure)
     # calculate the contingency table with margins
-    table <- addmargins(table(cases, exposure))
+    table <- stats::addmargins(table(cases, exposure))
     colnames(table) <- c("Not exposed", "Exposed",
                          "Total")
     rownames(table) <- c("Controls", "Cases", "Total")
@@ -40,8 +45,12 @@ cs <- function(data, case.var, exposure.var,
 
     # calculate the risks for different cases
     results$risk <- table["Cases",]/table["Total",]
-    rd <- .rd.fct(table[1:2,1:2])
-    rr <- .rr.fct(table[1:2,1:2])
+    rd <- .rd.fct(table[1:2,1:2],
+                  ci.type = "wald",
+                  alpha = alpha)
+    rr <- .rr.fct(table[1:2,1:2],
+                  ci.type = "wald",
+                  alpha = alpha)
     attr.frac.ex <- 1 - results$risk[1]/results$risk[2]
     # calculate risk diff, risk ratio and attr. frac. exp.
 
@@ -55,7 +64,7 @@ cs <- function(data, case.var, exposure.var,
     results$stats <- stats
 
     # calculate chi-squared statistic
-    chi.squared.result <- chisq.test(table[1:2,1:2],
+    chi.squared.result <- stats::chisq.test(table[1:2,1:2],
                                      correct = F)
     p.value <- chi.squared.result$p.value
     chi.squared <- chi.squared.result$statistic

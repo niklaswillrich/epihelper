@@ -3,11 +3,13 @@
 #' @param data data frame we are working on
 #' @param cases string of case variable
 #' @param exposure vector of strings of exposure variables
-#' @param output type of table output ( e.g. "plain", "html")
+#' @param output type of table output ( e.g. "plain", "html", "fancy")
+#' @param digits number of digits after decimal point in tables and printed output
 #' @return table of results and statistics
-#'    If option output = "html" is chosen, then no return but html
-#'    tables are printed. The default output="plain" returns two matrices with
-#'    the results for further processing.
+#'    If option output = "html" is chosen, then an html
+#'    table is printed. The default output="plain" returns a matrix with
+#'    the results for further processing. If output ="fancy", the function
+#'    returns a DT-datatable with interactive features.
 #'
 #' @keywords epidemiology, case control, table
 #' @export

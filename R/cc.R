@@ -4,28 +4,31 @@
 #' The results are comparable to the cc function in Stata.
 #'
 #' @param data data frame we are working on
-#' @param cases string of case variable
-#' @param exposure string of exposure variable
+#' @param case.var string of case variable
+#' @param exposure.var string of exposure variable
 #' @param output type of table output ( e.g. "plain", "html")
+#' @param digits number of digits to show after the decimal point
+#' @param alpha alpha for confidence intervals
 #' @return a list of tables of results and statistics
 #'    \itemize{
 #'    \item contains TODO
 #'    }
-#'    If option output = "html" is chosen, then no return but html
-#'    tables are printed. The default output="plain" returns two matrices with
+#'    The default output="plain" returns two matrices with
 #'    the results for further processing.
+#'    If option output = "html" is chosen, an html-table is returned.
+#'    The table can be shown in Rmarkdown documents by including it in a
+#'    chunk with option ' results="asis" ' .
 #'
 #' @keywords epidemiology, case control
 #' @export
 cc <- function(data, case.var, exposure.var,
-               output = "plain", digits = 2) {
+               output = "plain",
+               digits = 2,
+               alpha = 0.05) {
     # TODO calculate attr. frac. pop
 
     #TODO implement non-standard evaluation to avoid strings
-    # case.var <- substitute(case.var)
-    # cases <- eval(quote(case.var), data)
-    # exposure.var <- substitute(exposure.var)
-    # exposure <- eval(quote(exposure.var), data)
+
     stopifnot(is.character(case.var),
               is.character(exposure.var))
 
@@ -37,7 +40,7 @@ cc <- function(data, case.var, exposure.var,
     # check if cases and exposure are encoded 1/0
     .binary_check(cases, exposure)
 
-    table <- addmargins(table(cases, exposure))
+    table <- stats::addmargins(table(cases, exposure))
     prop.exposed <- table[,2]/table[,3]
     table <- cbind(table, prop.exposed)
     colnames(table) <- c("Not exposed", "Exposed",
@@ -47,7 +50,9 @@ cc <- function(data, case.var, exposure.var,
 
     # calculate odds ratio and associated confidence intervals
     # (default is Fisher exact so far)
-    or.list <- .or.fct(table[1:2,1:2])
+    or.list <- .or.fct(table[1:2,1:2],
+                       ci.type = "exact",
+                       alpha = alpha)
     odds.ratio <- or.list$value
     or.ci <- or.list$conf.int
 
@@ -55,7 +60,7 @@ cc <- function(data, case.var, exposure.var,
     attr.frac.ex <- 1 - 1/odds.ratio
 
     # calculate chi-squared statistic
-    chi.squared.result <- chisq.test(table[1:2,1:2],
+    chi.squared.result <- stats::chisq.test(table[1:2,1:2],
                                      correct = F)
     p.value <- chi.squared.result$p.value
     chi.squared <- chi.squared.result$statistic

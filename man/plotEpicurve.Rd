@@ -5,9 +5,9 @@
 \title{Create an epicurve plot}
 \usage{
 plotEpicurve(data, dates, unitOfTimeInDays = 1, unitOfLabel = "1 week",
-  xTitle = "Date", yTitle = "Number of cases", plotTitle = "none",
-  boxes = "auto", group = "none", groupHeading = " ",
-  groupColor = c("#345A8A", "#4F81BD", "grey"), fillColor = "steelblue")
+  xlab = "Date", ylab = "Number of cases", title = NULL, boxes = "auto",
+  group = NA, groupHeading = " ", groupColor = c("#345A8A", "#4F81BD",
+  "grey"), fillColor = "steelblue")
 }
 \arguments{
 \item{data}{data frame which includes dates vector}
@@ -18,16 +18,15 @@ plotEpicurve(data, dates, unitOfTimeInDays = 1, unitOfLabel = "1 week",
 
 \item{unitOfLabel}{character vector giving label}
 
-\item{xTitle}{title of x-axis}
+\item{xlab}{label of x-axis}
 
-\item{yTitle}{title of y-axis}
-
-\item{plotTitle}{title of plot}
+\item{title}{title of plot}
 
 \item{boxes}{indicates whether to show boxes for cases}
 
-\item{group}{vector of group membership or "none". Groups are
-shown in different colors.}
+\item{group}{name of the group column or NULL if no grouping}
+
+\item{groupHeading}{description of grouping for legend}
 
 \item{groupColor}{list of group colors}
 
@@ -35,10 +34,6 @@ shown in different colors.}
 }
 \description{
 A function to create an epicurve according to EPIET standards
-}
-\examples{
-plotEpicurve()
-
 }
 \keyword{epidemiology}
 

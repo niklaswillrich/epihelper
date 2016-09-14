@@ -8,6 +8,7 @@
 #' @param exposure string of exposure variable
 #' @param time time at risk for subjects
 #' @param output type of table output ( e.g. "plain", "html")
+#' @param digits number of digits to show after the decimal point
 #' @return a list of tables of results and statistics
 #'    \itemize{
 #'    \item table: contains table of cases, time at risk and incidence
@@ -24,14 +25,11 @@
 #' @export
 ir <- function(data, case.var, exposure.var, time.var,
                output = "plain", digits = 2,
-               alpha = 0.05, n.exact = 200) {
+               alpha = 0.05) {
   # TODO add confidence intervals for estimated characteristics
   # TODO add sanity checks and more options for displaying tables
   # TODO add option for stratifying by some other variable
 
-  n.exact <- 200 # critical value of observations below
-                 # which to choose the exact method.
-  alpha <- 0.05 # confidence level for intervals
 
 
   cases <- data[,case.var]
@@ -65,8 +63,8 @@ ir <- function(data, case.var, exposure.var, time.var,
 
   inc.diff.var <- (case1/time1^2 + case0/time0^2)^(1/2)
   ci.inc.diff <- c(
-        inc.rate1-inc.rate0 + qnorm(alpha/2)*inc.diff.var,
-        inc.rate1-inc.rate0 + qnorm(1-alpha/2)*inc.diff.var
+        inc.rate1-inc.rate0 + stats::qnorm(alpha/2)*inc.diff.var,
+        inc.rate1-inc.rate0 + stats::qnorm(1-alpha/2)*inc.diff.var
         )
 
   if (FALSE) {
@@ -83,8 +81,8 @@ ir <- function(data, case.var, exposure.var, time.var,
   } else {
       # Wald-type estimation
         ci.inc.ratio <- c(
-          exp(log(inc.ratio) + qnorm(alpha/2)*(1/case1+1/case0)),
-          exp(log(inc.ratio) + qnorm(1-alpha/2)*(1/case1+1/case0)))
+          exp(log(inc.ratio) + stats::qnorm(alpha/2)*(1/case1+1/case0)),
+          exp(log(inc.ratio) + stats::qnorm(1-alpha/2)*(1/case1+1/case0)))
 
   }
 
@@ -103,15 +101,15 @@ ir <- function(data, case.var, exposure.var, time.var,
     stats=stats
   )
   if (output == "plain") {
-    return(results)
+      print(results, digits = digits)
+      return(invisible(results))
+  } else if (output == "silent") {
+      return(results)
   } else if (output == "html") {
-    # pander::pandoc.table(table, style="rmarkdown")
-    # cat("\n")
-    # pander::pandoc.table(stats, style="rmarkdown")
       stargazer::stargazer(table, type ="html",
                            digits = digits)
       stargazer::stargazer(stats, type ="html",
-                           digits = 2, digits.extra = 2)
+                           digits = digits, digits.extra = digits)
   } else {
     stop("Output option not recognized.")
   }
